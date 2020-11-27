@@ -1,10 +1,10 @@
 from datetime import datetime
 from keras import backend as K
-from keras.callbacks import EarlyStopping, ModelCheckpoint
+from keras.callbacks import ModelCheckpoint
 
 from prepare.generator import get_generator
 from net.CRNN import text_recognition_model
-from callbacks import VizCallback
+from utils.callbacks import VizCallback
 
 
 def train():

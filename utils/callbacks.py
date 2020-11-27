@@ -1,7 +1,7 @@
 import numpy as np
 from keras.callbacks import Callback
 
-from functions import decode_batch, accuracies
+from utils.functions import decode_batch, accuracies
 
 
 class VizCallback(Callback):

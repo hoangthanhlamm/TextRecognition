@@ -1,11 +1,9 @@
 import numpy as np
 import cv2
-import keras
-import random
 from keras import backend as K
 import itertools
 
-from config import *
+from config.config import *
 
 import logging
 

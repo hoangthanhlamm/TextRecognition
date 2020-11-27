@@ -1,7 +1,7 @@
 import cv2
 import matplotlib.pyplot as plt
 
-from functions import predict_label
+from utils.functions import predict_label
 from net.CRNN import text_recognition_model
 
 

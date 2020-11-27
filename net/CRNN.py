@@ -7,8 +7,8 @@ from keras.layers import Reshape
 from keras.layers.recurrent import LSTM
 from keras.models import Model
 
-from config import *
-from functions import ctc_loss_function
+from config.config import *
+from utils.functions import ctc_loss_function
 
 
 def text_recognition_model(stage, drop_out_rate=0.35):

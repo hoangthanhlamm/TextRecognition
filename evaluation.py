@@ -2,8 +2,8 @@ import pandas as pd
 from datetime import datetime
 
 from net.CRNN import text_recognition_model
-from functions import predict_label
-from config import *
+from utils.functions import predict_label
+from config.config import *
 
 
 def predict_data_output(model, images, labels, n=None):

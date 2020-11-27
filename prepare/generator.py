@@ -5,8 +5,8 @@ import random
 from datetime import datetime
 from keras.callbacks import Callback
 
-from functions import word_to_label
-from config import *
+from utils.functions import word_to_label
+from config.config import *
 
 
 class DataGenerator(Callback):

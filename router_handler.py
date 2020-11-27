@@ -6,7 +6,7 @@ import logging
 from train import train
 from evaluation import evaluation
 from predict import predict
-from errors import ApiBadRequest
+from utils.errors import ApiBadRequest
 
 LOGGER = logging.getLogger(__name__)
 

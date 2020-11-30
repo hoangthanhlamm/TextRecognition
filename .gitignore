@@ -3,5 +3,5 @@
 Data/*
 checkpoint/final_model.h5
 
-!checkpoint/
-!Data/
+!checkpoint
+!Data

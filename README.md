@@ -10,7 +10,7 @@ Dataset used for project [here](https://drive.google.com/drive/folders/1A7vDf8_Z
 
 ## Model's weights checkpoint
 
-Download file weights checkpoint for prediction and evaluation [final_model.h5](https://drive.google.com/file/d/1SUvmaJpeYVsHZwxOCLrSSkUUqqHl1GvI/view?usp=sharing) and place in folder *checkpoint*
+Download file weights checkpoint for prediction and evaluation [model.weights.hdf5](https://drive.google.com/file/d/1KvzHgnXAOHQfrU9QkMo-K4yMhTP6P5et/view?usp=sharing) and place in folder *checkpoint*
 
 ## Run application
 

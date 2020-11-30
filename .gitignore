@@ -2,5 +2,3 @@
 **/.idea/
 Data/*
 checkpoint/*
-
-!checkpoint/model.weights.hdf5

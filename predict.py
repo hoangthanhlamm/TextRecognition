@@ -1,7 +1,4 @@
-import cv2
-import matplotlib.pyplot as plt
-
-from utils.functions import predict_label
+from lib.utils.utils import predict_label
 
 
 def predict(model, img):

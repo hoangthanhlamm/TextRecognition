@@ -2,9 +2,9 @@ from datetime import datetime
 from keras import backend as K
 from keras.callbacks import ModelCheckpoint
 
-from prepare.generator import get_generator
-from net.CRNN import text_recognition_model
-from utils.callbacks import VizCallback
+from lib.preprocess.generator import get_generator
+from lib.nets.CRNN import text_recognition_model
+from lib.utils.callbacks import VizCallback
 
 
 def train(model):
@@ -18,7 +18,7 @@ def train(model):
 
     # Callbacks
     # early_stop = EarlyStopping(monitor='val_loss', patience=4, restore_best_weights=True)
-    model_checkpoint = ModelCheckpoint('checkpoint/weights.{epoch:02d}-{val_loss:.2f}.hdf5', monitor='val_loss',
+    model_checkpoint = ModelCheckpoint('Data/checkpoint/weights.{epoch:02d}-{val_loss:.2f}.hdf5', monitor='val_loss',
                                        save_best_only=False, save_weights_only=True, verbose=0, mode='auto')
     train_viz_cb = VizCallback(test_func, train_gene.next_batch(), True, train_n_batches)
     val_viz_cb = VizCallback(test_func, val_gene.next_batch(), False, val_n_batches)

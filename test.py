@@ -13,7 +13,7 @@ LOGGER.setLevel(logging.INFO)
 def test_predict(n_tests):
     url = "http://localhost:8096/prediction"
 
-    data = pd.read_csv('Data/test_final.csv')
+    data = pd.read_csv('Data/csv/test_final.csv')
     data = data.to_numpy()
     data_len = data.shape[0]
     times = []

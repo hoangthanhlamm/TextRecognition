@@ -25,7 +25,7 @@ def store_grayscale(destination_folder, files, labels, n=None):
             break
     images_df = pd.DataFrame(images, columns=['Image', 'Label'])
     end = datetime.now()
-    print('Time taken for preprocessing: ', end - start)
+    print('Time taken for preprocess: ', end - start)
     return images_df
 
 

@@ -2,7 +2,7 @@ import pandas as pd
 from datetime import datetime
 import logging
 
-from utils.functions import predict_label
+from lib.utils.utils import predict_label
 
 
 def predict_data_output(model, images, labels, n=None):
@@ -43,7 +43,7 @@ def predict_data_output(model, images, labels, n=None):
 
 def evaluation(model, filename=None, paths=None, labels=None):
     if filename is None:
-        filename = 'Data/test_final.csv'
+        filename = 'Data/csv/test_final.csv'
 
     # Load Data for evaluation
     try:

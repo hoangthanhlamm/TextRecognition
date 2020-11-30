@@ -1,14 +1,13 @@
 from aiohttp.web import json_response
 from json.decoder import JSONDecodeError
+import pandas as pd
 
 import logging
 from datetime import datetime
 
-from train import train
-from evaluation import evaluation
-from predict import predict
-from utils.errors import ApiBadRequest
-from net.CRNN import text_recognition_model
+from lib.utils.errors import ApiBadRequest
+from lib.models.CRNNModel import CRNNModel
+from config import *
 
 logging.basicConfig(level=logging.INFO, format='[%(asctime)s] %(levelname)s: %(message)s')
 
@@ -16,12 +15,12 @@ logging.basicConfig(level=logging.INFO, format='[%(asctime)s] %(levelname)s: %(m
 class RouterHandler(object):
     def __init__(self, loop):
         self._loop = loop
-        self.model = text_recognition_model('predict')
-        self.model.load_weights('checkpoint/model.weights.hdf5')
+        self.model = CRNNModel(model_path=model_path, initial_state=False)
 
     async def train(self, request):
         start = datetime.now()
-        train(self.model)
+        self.model.build_model('train')
+        self.model.fit(epochs=epochs)
         end = datetime.now()
         return json_response({
             "status": "Success",
@@ -34,15 +33,29 @@ class RouterHandler(object):
         able_fields = ['filename', 'paths', 'labels']
         body = filter_fields(able_fields, body)
 
-        accuracy, letter_accuracy = evaluation(self.model, **body)
-        end = datetime.now()
-        time = end - start
+        filename = test_path
+        if body.get('filename') is not None:
+            filename = body.get('filename')
 
-        if accuracy is None:
+        try:
+            data = pd.read_csv(filename)
+        except FileNotFoundError as err:
+            logging.exception(err)
             return json_response({
                 "status": "Fail",
                 "detail": "File not found"
             })
+
+        paths = body.get('paths')
+        labels = body.get('labels')
+
+        if paths is None or labels is None:
+            paths = data['Image'].values.tolist()
+            labels = data['Label'].values.tolist()
+
+        accuracy, letter_accuracy = self.model.evaluate(paths, labels)
+        end = datetime.now()
+        time = end - start
 
         return json_response({
             "status": "Success",
@@ -58,14 +71,14 @@ class RouterHandler(object):
         validate_fields(required_fields, body)
 
         img = body.get('img')
-        predicted = predict(self.model, img)
+        predicted = self.model.predict(img)
         end = datetime.now()
         time = end - start
 
         if predicted is None:
             return json_response({
                 "status": "Fail",
-                "time": time.total_seconds()
+                "detail": "Image not found"
             })
 
         return json_response({

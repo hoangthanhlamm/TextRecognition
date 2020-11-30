@@ -3,7 +3,7 @@ import cv2
 from keras import backend as K
 import itertools
 
-from config.config import *
+from config import *
 
 import logging
 

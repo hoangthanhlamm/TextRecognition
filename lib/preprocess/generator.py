@@ -5,8 +5,8 @@ import random
 from datetime import datetime
 from keras.callbacks import Callback
 
-from utils.functions import word_to_label
-from config.config import *
+from lib.utils.utils import word_to_label
+from config import *
 
 
 class DataGenerator(Callback):
@@ -85,7 +85,7 @@ class DataGenerator(Callback):
 
 
 def get_generator(mode):
-    filename = 'Data/' + mode + '_final.csv'
+    filename = 'Data/csv/' + mode + '_final.csv'
     data = pd.read_csv(filename)
     paths = data['Image'].values.tolist()
     labels = data['Label'].values.tolist()

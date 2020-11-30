@@ -1,4 +1,6 @@
 **/__pycache__/
 **/.idea/
 Data/*
-checkpoint/final_model.h5
+checkpoint/*
+
+!checkpoint/model.weights.hdf5

@@ -7,8 +7,6 @@ from config.config import *
 
 import logging
 
-LOGGER = logging.getLogger(__name__)
-
 
 def word_to_label(word):
     label_lst = []
@@ -81,6 +79,9 @@ def accuracies(actual_labels, predicted_labels):
 def predict_label(model, image):
     try:
         img = cv2.imread(image)
+        if img is None:
+            logging.warning('Image not found')
+            return None
         img = cv2.resize(img, (img_width, img_height))
         img = img[:, :, 1]
         img = img.T
@@ -91,4 +92,4 @@ def predict_label(model, image):
         predicted = decode_label(out)
         return predicted
     except Exception as e:
-        LOGGER.exception(e)
+        logging.exception(e)

@@ -7,7 +7,7 @@ from net.CRNN import text_recognition_model
 from utils.callbacks import VizCallback
 
 
-def train():
+def train(model):
     # Data Generator
     train_gene, train_n_batches = get_generator(mode='train')
     val_gene, val_n_batches = get_generator(mode='val')
@@ -19,7 +19,7 @@ def train():
     # Callbacks
     # early_stop = EarlyStopping(monitor='val_loss', patience=4, restore_best_weights=True)
     model_checkpoint = ModelCheckpoint('checkpoint/weights.{epoch:02d}-{val_loss:.2f}.hdf5', monitor='val_loss',
-                                       save_best_only=False, save_weights_only=True, verbose=0, mode='auto', preiod=2)
+                                       save_best_only=False, save_weights_only=True, verbose=0, mode='auto')
     train_viz_cb = VizCallback(test_func, train_gene.next_batch(), True, train_n_batches)
     val_viz_cb = VizCallback(test_func, val_gene.next_batch(), False, val_n_batches)
 
@@ -40,4 +40,5 @@ def train():
     print('Time to train: ', end - start)
 
     # Save Model
-    model.save('checkpoint/final_model.h5')
+    model.save('checkpoint/model.h5')
+    return history_training

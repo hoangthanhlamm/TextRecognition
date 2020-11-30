@@ -5,7 +5,10 @@ from aiohttp import web
 from zmq.asyncio import ZMQEventLoop
 from router_handler import RouterHandler
 
+logging.basicConfig(level=logging.INFO, format='[%(asctime)s] %(levelname)s: %(message)s')
+
 LOGGER = logging.getLogger(__name__)
+LOGGER.setLevel(logging.INFO)
 
 
 def start_server(host, port):

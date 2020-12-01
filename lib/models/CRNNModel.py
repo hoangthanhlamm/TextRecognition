@@ -8,8 +8,7 @@ from keras import backend as K
 from lib.nets.CRNN import CRNN
 from lib.preprocess.generator import get_generator
 from lib.utils.callbacks import VizCallback
-from lib.utils.utils import predict_label, ctc_loss_function
-from evaluation import predict_data_output
+from lib.utils.utils import predict_label, ctc_loss_function, predict_data_output
 
 
 class CRNNModel(object):
@@ -77,7 +76,7 @@ class CRNNModel(object):
             early_stop = EarlyStopping(monitor='val_loss', patience=4, restore_best_weights=True)
             callbacks.append(early_stop)
 
-        model_checkpoint = ModelCheckpoint('checkpoint/weights.{epoch:02d}-{val_loss:.2f}.hdf5', monitor='val_loss',
+        model_checkpoint = ModelCheckpoint('checkpoints/weights.{epoch:02d}-{val_loss:.2f}.hdf5', monitor='val_loss',
                                            save_best_only=False, save_weights_only=True, verbose=0, mode='auto')
         callbacks.append(model_checkpoint)
 
@@ -93,7 +92,7 @@ class CRNNModel(object):
         end = datetime.now()
         print("Time to train: ", end - start)
 
-        self.save_model('checkpoint/model.h5')
+        self.save_model('models/model.h5')
 
     def evaluate(self, X, y):
         acc, letter_acc, letter_cnt, mis_match, n_predicteds = predict_data_output(self.model, X, y)

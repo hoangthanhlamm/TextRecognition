@@ -14,5 +14,7 @@ epochs = 20
 batch_size = 16
 max_length = 15
 
-model_path = 'Data/checkpoint/model.weights.hdf5'
+model_path = 'Data/models/model.weights.hdf5'
 test_path = 'Data/csv/test_final.csv'
+
+download_data_path = "https://drive.google.com/uc?id=1trrO0sUwNf6mXWvV45SMfLrPVJ9BLwLE"

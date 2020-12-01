@@ -6,6 +6,7 @@ import itertools
 from config import *
 
 import logging
+from datetime import datetime
 
 
 def word_to_label(word):
@@ -93,3 +94,39 @@ def predict_label(model, image):
         return predicted
     except Exception as e:
         logging.exception(e)
+
+
+def predict_data_output(model, images, labels, n=None):
+    if n is None or n > len(images):
+        n = len(images)
+    start = datetime.now()
+    acc = 0
+    letter_acc = 0
+    letter_cnt = 0
+    cnt = 0
+    letter_mis = []  # count miss match letter for each images
+    predicteds = []
+    for i in range(n):
+        predicted = predict_label(model, images[i])
+        if predicted is None:
+            continue
+        predicteds.append(predicted)
+        actual = labels[i]
+
+        cnt += 1
+        mis = 0
+        for j in range(min(len(predicted), len(actual))):
+            if predicted[j] == actual[j]:
+                letter_acc += 1
+            else:
+                mis += 1
+        letter_cnt += max(len(predicted), len(actual))
+        letter_mis.append(mis)
+
+        if predicted == actual:
+            acc += 1
+        if cnt % 100 == 0:
+            print("Processed {} images".format(cnt))
+    end = datetime.now()
+    print("Total Times: ", end - start)
+    return acc, letter_acc, letter_cnt, letter_mis, cnt

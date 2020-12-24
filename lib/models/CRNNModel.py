@@ -1,5 +1,8 @@
+import os
 import logging
+import codecs
 from datetime import datetime
+
 import matplotlib.pyplot as plt
 from keras.utils import plot_model
 from keras.callbacks import EarlyStopping, ModelCheckpoint
@@ -9,11 +12,17 @@ from lib.nets.CRNN import CRNN
 from lib.preprocess.generator import get_generator
 from lib.utils.callbacks import VizCallback
 from lib.utils.utils import predict_label, ctc_loss_function, predict_data_output
+from lib.word_beam_search.language_model import LanguageModel
+from config import data_path
 
 
 class CRNNModel(object):
     def __init__(self, model_path, initial_state=True):
         self.model_path = model_path
+
+        self.chars = codecs.open(os.path.join(data_path, 'chars.txt'), 'r', 'utf-8').read()
+        self.lm = self.get_language_model(data_path)
+
         if initial_state:
             self.build_model('train')
         else:
@@ -29,6 +38,13 @@ class CRNNModel(object):
         else:
             self.model = crnn()
             self.load_model()
+
+    def get_language_model(self, path):
+        wordChars = codecs.open(os.path.join(path, 'wordChars.txt'), 'r', 'utf8').read()
+        corpus = codecs.open(os.path.join(path, 'corpus.txt'), 'r', 'utf8').read()
+        lm = LanguageModel(corpus, self.chars, wordChars)
+
+        return lm
 
     def load_model(self, model_path=None):
         if model_path is None:
@@ -95,7 +111,7 @@ class CRNNModel(object):
         self.save_model('models/model.h5')
 
     def evaluate(self, X, y):
-        acc, letter_acc, letter_cnt, mis_match, n_predicteds = predict_data_output(self.model, X, y)
+        acc, letter_acc, letter_cnt, mis_match, n_predicteds = predict_data_output(self.model, X, y, self.lm)
 
         accuracy = round((acc / n_predicteds) * 100, 2)
         letter_accuracy = round((letter_acc / letter_cnt) * 100, 2)
@@ -106,5 +122,5 @@ class CRNNModel(object):
         return accuracy, letter_accuracy
 
     def predict(self, x):
-        predicted = predict_label(self.model, x)
+        predicted = predict_label(self.model, x, self.lm)
         return predicted

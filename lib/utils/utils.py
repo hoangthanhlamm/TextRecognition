@@ -4,6 +4,7 @@ from keras import backend as K
 import itertools
 
 from config import *
+from lib.word_beam_search.word_beam_search import word_beam_search
 
 import logging
 from datetime import datetime
@@ -32,11 +33,17 @@ def ctc_loss_function(args):
     return K.ctc_batch_cost(y_true, y_pred, input_length, label_length)
 
 
-def decode_label(out):
-    # out: (1, 42, 37)
-    out_best = list(np.argmax(out[0, 2:], axis=1))
-    out_best = [k for k, g in itertools.groupby(out_best)]
-    out_str = label_to_word(out_best)
+# def decode_label(out):
+#     # out: (1, 42, 37)
+#     out_best = list(np.argmax(out[0, 2:], axis=1))
+#     out_best = [k for k, g in itertools.groupby(out_best)]
+#     out_str = label_to_word(out_best)
+#     return out_str
+
+
+def decode_label(lm, out):
+    mat = out[0, 2:, :]
+    out_str = word_beam_search(mat, beam_width, lm, False)
     return out_str
 
 
@@ -77,7 +84,7 @@ def accuracies(actual_labels, predicted_labels):
     return final_accuracy, final_letter_accuracy
 
 
-def predict_label(model, image):
+def predict_label(model, image, lm):
     try:
         img = cv2.imread(image)
         if img is None:
@@ -90,13 +97,13 @@ def predict_label(model, image):
         img = np.expand_dims(img, axis=0)
         img = img / 255
         out = model.predict(img)
-        predicted = decode_label(out)
+        predicted = decode_label(lm, out)
         return predicted
     except Exception as e:
         logging.exception(e)
 
 
-def predict_data_output(model, images, labels, n=None):
+def predict_data_output(model, images, labels, lm, n=None):
     if n is None or n > len(images):
         n = len(images)
     start = datetime.now()
@@ -107,7 +114,7 @@ def predict_data_output(model, images, labels, n=None):
     letter_mis = []  # count miss match letter for each images
     predicteds = []
     for i in range(n):
-        predicted = predict_label(model, images[i])
+        predicted = predict_label(model, images[i], lm)
         if predicted is None:
             continue
         predicteds.append(predicted)

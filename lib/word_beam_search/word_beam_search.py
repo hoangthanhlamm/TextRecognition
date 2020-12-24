@@ -63,5 +63,5 @@ if __name__ == '__main__':
     testLM = LanguageModel('a aa ab ba bb', 'ab ', 'ab')
     testMat = np.array([[0.3, 0.5, 0, 0.2], [0.3, 0.3, 0.25, 0.15]])
     testBW = 25
-    res = wordBeamSearch(testMat, testBW, testLM, False)
+    res = word_beam_search(testMat, testBW, testLM, False)
     print('Result: "' + res + '"')
